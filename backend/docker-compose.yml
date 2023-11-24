@@ -31,8 +31,23 @@ services:
     networks:
       - mynetwork
 
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin/data
+    networks:
+      - mynetwork
+
 networks:
       mynetwork:
 
 volumes:
   db_data:
+  pgadmin-data:
