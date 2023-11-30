@@ -55,6 +55,11 @@ class User(AbstractModel, AbstractBaseUser, PermissionsMixin):
     bio = models.TextField(null=True)
     avatar = models.ImageField(null=True)
 
+    posts_liked = models.ManyToManyField(
+        "core_post.Post",
+        related_name="liked_by"
+    )
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -66,3 +71,12 @@ class User(AbstractModel, AbstractBaseUser, PermissionsMixin):
     @property
     def name(self):
         return f"{self.first_name} {self.last_name}"
+    
+    def like(self, post):
+        return self.posts_liked.add(post)
+    
+    def remove_like(self, post):
+        return self.posts_liked.remove(post)
+    
+    def has_liked(self, post):
+        return self.posts_liked.filter(pk=post.pk).exists()
